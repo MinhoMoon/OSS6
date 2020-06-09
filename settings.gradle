@@ -1,2 +1,2 @@
-rootProject.name='GoogleLogin'
+rootProject.name='oss6'
 include ':app'
