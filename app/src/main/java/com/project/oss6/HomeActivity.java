@@ -1,6 +1,5 @@
 package com.project.oss6;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -34,7 +33,7 @@ public class HomeActivity extends YouTubeBaseActivity {
         random = new Random();
     }
     YouTubePlayerView youtubeView;
-    Button button,nextbutton;
+    Button playbutton,nextbutton,pausebutton;
     YouTubePlayer.OnInitializedListener listener;
 
     @Override
@@ -43,9 +42,10 @@ public class HomeActivity extends YouTubeBaseActivity {
         setContentView(R.layout.activity_home);
 
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        button = (Button) findViewById(R.id.youtubebutton);
+        playbutton = (Button) findViewById(R.id.youtubebutton);
         youtubeView = (YouTubePlayerView) findViewById(R.id.youtubeView);
         nextbutton = (Button) findViewById(R.id.nextbutton);
+        pausebutton = (Button)findViewById(R.id.pausebutton);
 
         listener = new YouTubePlayer.OnInitializedListener(){
 
@@ -81,19 +81,26 @@ public class HomeActivity extends YouTubeBaseActivity {
                         }
                     }
                 });
+                playbutton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        youTubePlayer.play();
+                    }
+                });
+                pausebutton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        youTubePlayer.pause();
+                    }
+                });
             }
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
             }
         };
+        youtubeView.initialize("AIzaSyDKl_NSpIyEdS2WQYp0CDaDCxHCkh_eztM",listener);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                youtubeView.initialize("AIzaSyDKl_NSpIyEdS2WQYp0CDaDCxHCkh_eztM",listener);
-            }
-        });
 
         btn_Weather = findViewById(R.id.btn_Weather);
         btn_Weather.setOnClickListener(new View.OnClickListener(){
