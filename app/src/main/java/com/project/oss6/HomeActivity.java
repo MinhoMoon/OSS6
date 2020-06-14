@@ -21,6 +21,16 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.Random;
 
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+
+
+
 public class HomeActivity extends YouTubeBaseActivity {
     private Button btn_Weather;
     Random random;
@@ -42,22 +52,33 @@ public class HomeActivity extends YouTubeBaseActivity {
         setContentView(R.layout.activity_home);
 
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        playbutton = (Button) findViewById(R.id.youtubebutton);
-        youtubeView = (YouTubePlayerView) findViewById(R.id.youtubeView);
-        nextbutton = (Button) findViewById(R.id.nextbutton);
-        pausebutton = (Button)findViewById(R.id.pausebutton);
+        playbutton = findViewById(R.id.youtubebutton);
+        youtubeView = findViewById(R.id.youtubeView);
+        nextbutton = findViewById(R.id.nextbutton);
+        pausebutton = findViewById(R.id.pausebutton);
+
 
         listener = new YouTubePlayer.OnInitializedListener(){
 
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS); //화면 못건드리게
+                NewRunnable nr = new NewRunnable();
+                final Thread w = new Thread(nr);
+                if(true){
+                    w.start();
+                }
+                //처음 시작시 보이지 않는다 play를 눌러야 재생되면서 보임
                 youTubePlayer.loadPlaylist("PL4fGSI1pDJn6jXS_Tv_N9B8Z0HTRVJE0m",random.nextInt(100),0);//db에 재생목록 아이디와 최대 곡수를 저장시키고 랜덤으로 플레이
                 nextbutton.setOnClickListener(new View.OnClickListener() {
+
+
                     @Override
                     public void onClick(View v) {
-                        youTubePlayer.next();
-                        if ( Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                        youTubePlayer.next();//다음곡 버튼
+
+
+                        /*if ( Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
                             ActivityCompat.requestPermissions( HomeActivity.this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0 );
                         }
                         else{
@@ -78,22 +99,25 @@ public class HomeActivity extends YouTubeBaseActivity {
                                     5000,
                                     1,
                                     gps_LocationListener);
-                        }
+                        }*/
                     }
+
                 });
                 playbutton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        youTubePlayer.play();
+                        youTubePlayer.play();//재생버튼
+
                     }
                 });
                 pausebutton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        youTubePlayer.pause();
+                        youTubePlayer.pause();//일시정지 버튼
                     }
                 });
             }
+
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
 
@@ -132,4 +156,47 @@ public class HomeActivity extends YouTubeBaseActivity {
         public void onProviderDisabled(String provider) {
         }
     };
+    class NewRunnable implements Runnable {
+        @Override
+        public void run() {
+
+            while(true){
+            try {
+                weather();
+                Thread.sleep(5000); //5초마다 재실행
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            }
+
+        }
+    }
+
+        public void weather() throws IOException {
+            StringBuilder urlBuilder = new StringBuilder("http://api.openweathermap.org/data/2.5/weather"); /*URL*/
+            urlBuilder.append("?" + URLEncoder.encode("lat","UTF-8") + "=37"); /*위도*/
+            urlBuilder.append("&" + URLEncoder.encode("lon","UTF-8") + "=126" ); /*공공데이터포털에서 받은 인증키*/
+            urlBuilder.append("&" + URLEncoder.encode("appid","UTF-8") + "=94c29906846b82e6e359edce29c1a4c8"); /*키번호*/
+            urlBuilder.append("&units=metric"); /*섭씨*/
+            URL url = new URL(urlBuilder.toString());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-type", "application/json");
+            System.out.println("Response code: " + conn.getResponseCode());
+            BufferedReader rd;
+            if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            rd.close();
+            conn.disconnect();
+            System.out.println(sb.toString());
+        }
+
 }
