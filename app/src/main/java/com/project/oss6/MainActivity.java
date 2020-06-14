@@ -1,12 +1,12 @@
 package com.project.oss6;
 
-import androidx.appcompat.app.AppCompatActivity;
+        import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+        import android.content.Intent;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
     EditText _getAge;
@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       _getAge = findViewById(R.id._getAge);
+        _getAge = findViewById(R.id._getAge);
 
         btn_MoveHome = findViewById(R.id.btn_MoveHome);
         btn_MoveHome.setOnClickListener(new View.OnClickListener(){
@@ -33,4 +33,3 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-System.out.println("df");
