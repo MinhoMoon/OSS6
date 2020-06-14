@@ -183,10 +183,8 @@ public class HomeActivity extends YouTubeBaseActivity {
                 e.printStackTrace();
             }
             }
-
         }
     }
-
 
         public void weather() throws IOException {
 
