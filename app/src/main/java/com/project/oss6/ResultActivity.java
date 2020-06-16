@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,7 +15,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private TextView tv_result;//닉네임 TEXT
     private ImageView iv_profile; // 이미지 프로필
-
+    ImageButton btn_next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,5 +32,13 @@ public class ResultActivity extends AppCompatActivity {
         iv_profile = findViewById(R.id.iv_profile);
         Glide.with(this).load(photoUrl).into(iv_profile); // 프로필 url을 이미지 뷰에 세팅
 
+        btn_next = (ImageButton)findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ResultActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
