@@ -39,6 +39,7 @@ public class HomeActivity extends YouTubeBaseActivity {
     double gps_GetLongitude;
     double gps_GetAltitude;
 
+
     {
         random = new Random();
     }
