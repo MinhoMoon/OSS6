@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -33,12 +34,12 @@ import java.io.IOException;
 
 public class HomeActivity extends YouTubeBaseActivity {
     private Button btn_Weather;
+
     Random random;
     String gps_GetProvider;
     double gps_GetLatitude;
     double gps_GetLongitude;
     double gps_GetAltitude;
-
     {
         random = new Random();
     }
@@ -56,6 +57,7 @@ public class HomeActivity extends YouTubeBaseActivity {
         nextbutton = findViewById(R.id.nextbutton);
         pausebutton = findViewById(R.id.pausebutton);
         btn_Weather = findViewById(R.id.btn_Weather);
+        btn_Weather.setSelected(true);
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -105,6 +107,7 @@ public class HomeActivity extends YouTubeBaseActivity {
                 final Thread w = new Thread(nr);
                 final Thread gt = new Thread(g);
                 if(true){
+                    gt.start();
                     w.start();
                 }
                 //처음 시작시 보이지 않는다 play를 눌러야 재생되면서 보임
@@ -115,7 +118,7 @@ public class HomeActivity extends YouTubeBaseActivity {
                     @Override
                     public void onClick(View v) {
                         youTubePlayer.next();//다음곡 버튼
-                        gt.start();
+
                     }
 
                 });
