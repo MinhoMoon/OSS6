@@ -22,6 +22,11 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Random;
 
 import java.io.InputStreamReader;
@@ -33,8 +38,8 @@ import java.io.IOException;
 
 
 public class HomeActivity extends YouTubeBaseActivity {
-    private Button btn_Weather;
-
+    Button btn_Weather;
+    String weatherline;
     Random random;
     String gps_GetProvider;
     double gps_GetLatitude;
@@ -181,17 +186,18 @@ public class HomeActivity extends YouTubeBaseActivity {
             while(true){
             try {
                 weather();
-                Thread.sleep(5000); //5초마다 재실행
-            } catch (IOException | InterruptedException e) {
+                Thread.sleep(60000); //60초마다 재실행
+            } catch (IOException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
             }
         }
     }
 
-        public void weather() throws IOException {
-
-
+        public void weather() throws IOException, JSONException {
+        int code=0;
+        String mainW=null;
+        double temp=0;
             StringBuilder urlBuilder = new StringBuilder("http://api.openweathermap.org/data/2.5/weather"); /*URL*/
             urlBuilder.append("?" + URLEncoder.encode("lat","UTF-8") + "="+gps_GetLatitude); /*위도*/
             urlBuilder.append("&" + URLEncoder.encode("lon","UTF-8") + "="+gps_GetLongitude ); /*공공데이터포털에서 받은 인증키*/
@@ -210,12 +216,43 @@ public class HomeActivity extends YouTubeBaseActivity {
             }
             StringBuilder sb = new StringBuilder();
             String line;
+            JSONObject jobject = null;
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
+                jobject = new JSONObject(line);
+
             }
             rd.close();
             conn.disconnect();
             System.out.println(sb.toString());
+            JSONArray jsonArray = jobject.getJSONArray("weather");
+            for (int i = 0; i < jsonArray.length(); i++) {
+            HashMap map = new HashMap<>();
+            JSONObject jObject = jsonArray.getJSONObject(i);
+            code = jObject.optInt("id");
+            mainW= jObject.optString("main");
+            }
+            JSONObject jjobject =jobject.getJSONObject("main");
+            temp=jjobject.optDouble("temp");
+            System.out.println("\n\n"+temp+", "+code+", "+mainW);
+            weatherline = "   현재 날씨는 "+temp+"℃/"+mainW+" 입니다.(자세한 날씨를 보려면 클릭해주세요)";
+            GuiThread g = new GuiThread();
+            Thread WeatherGuiThread = new Thread(g);
+            WeatherGuiThread.start();
+
         }
+
+    class GuiThread implements Runnable {
+        @Override
+        public void run() {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btn_Weather.setText(weatherline);
+                }
+            });
+        }
+    }
 
 }
