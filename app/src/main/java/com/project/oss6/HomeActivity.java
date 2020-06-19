@@ -3,6 +3,7 @@ package com.project.oss6;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import androidx.annotation.NonNull;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,11 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Random;
 
@@ -33,6 +39,11 @@ import java.io.IOException;
 
 
 public class HomeActivity extends YouTubeBaseActivity {
+    //파베
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    //파베
+
     private Button btn_Weather;
 
     Random random;
@@ -52,6 +63,27 @@ public class HomeActivity extends YouTubeBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //파이어베이스
+        database = FirebaseDatabase.getInstance();
+
+        databaseReference = database.getReference("musicCase1");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // 데이터를 정상적으로 가져올경우
+                Object getMusicCase1 = dataSnapshot.getValue();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터를 읽어오지 못할경우
+                databaseError.toException().printStackTrace();
+            }
+        });
+        //파이어베이스종료
+
         playbutton = findViewById(R.id.youtubebutton);
         youtubeView = findViewById(R.id.youtubeView);
         nextbutton = findViewById(R.id.nextbutton);
