@@ -44,6 +44,7 @@ import java.io.IOException;
 
 
 public class HomeActivity extends YouTubeBaseActivity {
+    String YoutubeURL=null,tempp=null;
     Button btn_Weather;
     String weatherline;
     //파베
@@ -141,6 +142,7 @@ public class HomeActivity extends YouTubeBaseActivity {
                 final Thread dd = new Thread(d);
                 final Thread w = new Thread(nr);
                 final Thread gt = new Thread(g);
+
                 if(true){
                     gt.start();
                     w.start();
@@ -155,6 +157,11 @@ public class HomeActivity extends YouTubeBaseActivity {
                     @Override
                     public void onClick(View v) {
                         youTubePlayer.next();//다음곡 버튼
+
+                        if(YoutubeURL!=tempp) {
+                            youTubePlayer.loadPlaylist(YoutubeURL, 1, 0);
+                            tempp= YoutubeURL;
+                        }
 
                     }
 
@@ -179,7 +186,8 @@ public class HomeActivity extends YouTubeBaseActivity {
 
             }
         };
-        youtubeView.initialize("AIzaSyDKl_NSpIyEdS2WQYp0CDaDCxHCkh_eztM",listener);
+        youtubeView.initialize("AIzaSyDKl_NSpIyEdS2WQYp0CDaDCxHCkh_eztM",listener);//키입력해서 유튜브뷰 초기화
+
         btn_Weather.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -223,13 +231,14 @@ public class HomeActivity extends YouTubeBaseActivity {
     }
     public void dbConnection(FirebaseDatabase DB) {
         databaseReference = database.getReferenceFromUrl("https://jaehun-96b00.firebaseio.com/");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // 데이터를 정상적으로 가져올경우
 
-                Object getMusicCase1 = dataSnapshot.child("please");
-                System.out.println("하하하하하ㅏ하하"+ getMusicCase1.toString());
+                Object getMusicCase1 = dataSnapshot.child(code).getValue(String.class);
+                YoutubeURL = getMusicCase1.toString();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -279,7 +288,6 @@ public class HomeActivity extends YouTubeBaseActivity {
             }
             JSONObject jjobject =jobject.getJSONObject("main");
             temp=jjobject.optDouble("temp");
-            System.out.println("\n\n"+temp+", "+code+", "+mainW);
             weatherline = "   현재 날씨는 "+temp+"℃/"+mainW+" 입니다.(자세한 날씨를 보려면 클릭해주세요)";
             GuiThread g = new GuiThread();
             Thread WeatherGuiThread = new Thread(g);

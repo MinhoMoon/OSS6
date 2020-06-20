@@ -56,7 +56,6 @@
         android:ellipsize="marquee"
 
         android:singleLine="true"
-        android:text="%%년 %월 %일 현재 날씨는 26도/구름많음 입니다(자세한 날씨를 원하면 클릭해주세요)"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="#FFFFFF"
