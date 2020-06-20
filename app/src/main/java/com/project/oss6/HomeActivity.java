@@ -44,20 +44,17 @@ import java.io.IOException;
 
 
 public class HomeActivity extends YouTubeBaseActivity {
+    Button btn_Weather;
+    String weatherline;
     //파베
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-    //파베
-
-    private Button btn_Weather;
-
-
-    String weatherline;
     Random random;
     String gps_GetProvider;
     double gps_GetLatitude;
     double gps_GetLongitude;
     double gps_GetAltitude;
+    String code=null;
     {
         random = new Random();
     }
@@ -73,23 +70,7 @@ public class HomeActivity extends YouTubeBaseActivity {
 
         //파이어베이스
         database = FirebaseDatabase.getInstance();
-
-        databaseReference = database.getReference("musicCase1");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // 데이터를 정상적으로 가져올경우
-                Object getMusicCase1 = dataSnapshot.getValue();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // 데이터를 읽어오지 못할경우
-                databaseError.toException().printStackTrace();
-            }
-        });
-        //파이어베이스종료
+        database.getInstance ().setPersistenceEnabled(true);
 
         playbutton = findViewById(R.id.youtubebutton);
         youtubeView = findViewById(R.id.youtubeView);
@@ -133,9 +114,22 @@ public class HomeActivity extends YouTubeBaseActivity {
                 }
             }
         }
-
-
-
+        class databaseconnection implements Runnable {
+            @Override
+            public void run()
+            {
+                while(true){
+                    if(code!=null){
+                dbConnection(database);
+                    }
+                    try {
+                        Thread.sleep(6000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         listener = new YouTubePlayer.OnInitializedListener(){
 
             @Override
@@ -143,12 +137,16 @@ public class HomeActivity extends YouTubeBaseActivity {
                 youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS); //화면 못건드리게
                 NewRunnable nr = new NewRunnable();
                 gpsThread g = new gpsThread();
+                databaseconnection d = new databaseconnection();
+                final Thread dd = new Thread(d);
                 final Thread w = new Thread(nr);
                 final Thread gt = new Thread(g);
                 if(true){
                     gt.start();
                     w.start();
+                   dd.start();
                 }
+
                 //처음 시작시 보이지 않는다 play를 눌러야 재생되면서 보임
                 youTubePlayer.loadPlaylist("PL4fGSI1pDJn6jXS_Tv_N9B8Z0HTRVJE0m",random.nextInt(100),0);//db에 재생목록 아이디와 최대 곡수를 저장시키고 랜덤으로 플레이
                 nextbutton.setOnClickListener(new View.OnClickListener() {
@@ -182,9 +180,6 @@ public class HomeActivity extends YouTubeBaseActivity {
             }
         };
         youtubeView.initialize("AIzaSyDKl_NSpIyEdS2WQYp0CDaDCxHCkh_eztM",listener);
-
-
-
         btn_Weather.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -192,7 +187,6 @@ public class HomeActivity extends YouTubeBaseActivity {
                 startActivity(intent);
             }
         });
-
     }
     final LocationListener gps_LocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
@@ -220,16 +214,33 @@ public class HomeActivity extends YouTubeBaseActivity {
             while(true){
             try {
                 weather();
-                Thread.sleep(5000); //5초마다 재실행
-            } catch (IOException | InterruptedException e) {
+                Thread.sleep(6000); //60초마다 재실행
+            } catch (IOException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
             }
         }
     }
+    public void dbConnection(FirebaseDatabase DB) {
+        databaseReference = database.getReferenceFromUrl("https://jaehun-96b00.firebaseio.com/");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // 데이터를 정상적으로 가져올경우
+
+                Object getMusicCase1 = dataSnapshot.child("please");
+                System.out.println("하하하하하ㅏ하하"+ getMusicCase1.toString());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터를 읽어오지 못할경우
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
 
         public void weather() throws IOException, JSONException {
-        int code=0;
+
         String mainW=null;
         double temp=0;
             StringBuilder urlBuilder = new StringBuilder("http://api.openweathermap.org/data/2.5/weather"); /*URL*/
@@ -263,7 +274,7 @@ public class HomeActivity extends YouTubeBaseActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
             HashMap map = new HashMap<>();
             JSONObject jObject = jsonArray.getJSONObject(i);
-            code = jObject.optInt("id");
+            code = jObject.optString("id");
             mainW= jObject.optString("main");
             }
             JSONObject jjobject =jobject.getJSONObject("main");
