@@ -11,7 +11,7 @@
         android:id="@+id/btn_google"
         android:layout_width="181dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="124dp"
         android:background="#4D4DAE"
         android:hapticFeedbackEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,11 +26,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="362dp"
-        android:layout_height="356dp"
-        android:layout_marginTop="100dp"
+        android:layout_width="404dp"
+        android:layout_height="378dp"
+        android:layout_marginTop="176dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo2" />

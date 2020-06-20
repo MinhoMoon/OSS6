@@ -152,7 +152,8 @@ public class HomeActivity extends YouTubeBaseActivity {
                 //처음 시작시 보이지 않는다 play를 눌러야 재생되면서 보임
                 youTubePlayer.loadPlaylist("PL4fGSI1pDJn6jXS_Tv_N9B8Z0HTRVJE0m",random.nextInt(100),0);//db에 재생목록 아이디와 최대 곡수를 저장시키고 랜덤으로 플레이
                 nextbutton.setOnClickListener(new View.OnClickListener() {
-
+//바로적용되지 않고 처음에는 한국 인기곡 100을 튼다
+                    //db연결시 떳던 오류들 적기 , db연결방법 , 리스너, 값 가져오기 등등
 
                     @Override
                     public void onClick(View v) {
@@ -288,7 +289,28 @@ public class HomeActivity extends YouTubeBaseActivity {
             }
             JSONObject jjobject =jobject.getJSONObject("main");
             temp=jjobject.optDouble("temp");
-            weatherline = "   현재 날씨는 "+temp+"℃/"+mainW+" 입니다.(자세한 날씨를 보려면 클릭해주세요)";
+            switch (mainW){
+                case "Clear" : mainW="맑음";break;
+                case "Clouds" : mainW="구름낌"; break;
+                case "Mist" : mainW="엷은안개";break;
+                case "Smoke" : mainW="대기오염";break;
+                case "Haze" : mainW="아지랑이";break;
+                case "Dust" : mainW="먼지";break;
+                case "Fog" : mainW="짙은안개";break;
+                case "Sand" : mainW="모래";break;
+                case "Ash" : mainW="화산재";break;
+                case "Squall" : mainW="돌풍";break;
+                case "Tornado" : mainW="토네이도";break;
+                case "Drizzle" : mainW="이슬비";break;
+                case "Thunderstorm" : mainW="천둥번개";break;
+                case "Snow" : mainW="눈";break;
+                case "Rain" : mainW="비";break;
+
+
+
+                default:break;
+
+            }            weatherline = "   현재 날씨는 "+temp+"℃/"+mainW+" 입니다.(자세한 날씨를 보려면 클릭해주세요)";
             GuiThread g = new GuiThread();
             Thread WeatherGuiThread = new Thread(g);
             WeatherGuiThread.start();
