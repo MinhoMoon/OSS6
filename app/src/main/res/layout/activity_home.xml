@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+
     tools:context=".HomeActivity">
 
     <TableLayout
@@ -40,8 +40,8 @@
         android:layout_height="95dp"
         android:layout_marginEnd="279dp"
         android:layout_marginRight="279dp"
+        android:background="@drawable/play"
         android:cursorVisible="false"
-        android:text="PLAY"
         app:layout_constraintBottom_toBottomOf="@+id/tableLayout"
         app:layout_constraintEnd_toEndOf="@+id/tableLayout"
         app:layout_constraintStart_toStartOf="parent" />
@@ -72,7 +72,7 @@
         android:id="@+id/pausebutton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="PAUSE"
+        android:background="@drawable/pause"
         app:layout_constraintBottom_toBottomOf="@+id/tableLayout"
         app:layout_constraintEnd_toStartOf="@+id/nextbutton"
         app:layout_constraintStart_toEndOf="@+id/youtubebutton"
@@ -82,7 +82,7 @@
         android:id="@+id/nextbutton"
         android:layout_width="132dp"
         android:layout_height="94dp"
-        android:text="NEXT"
+        android:background="@drawable/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
