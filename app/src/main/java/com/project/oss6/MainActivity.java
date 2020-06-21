@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private GoogleApiClient googleApiClient;
     private static final int REQ_SIGN_GOOGLE = 100;  // 구글 로그인 결과 코드
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
