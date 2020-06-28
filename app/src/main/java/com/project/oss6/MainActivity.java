@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) { //로그인이 성공했을 때
-                            Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "로그인 성공_위치정보 동의가 필요합니다", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
                             intent.putExtra("nickName", account.getDisplayName());
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl())); // string.valueOf() 특정 자료형을 string 형태로 변환

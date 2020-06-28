@@ -24,6 +24,7 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+
         Intent intent = getIntent();
         String nickName = intent.getStringExtra("nickName"); // MainActivity로 부터 닉네임 받음
         String photoUrl = intent.getStringExtra("photoUrl"); // MainActivity로 부터 프로필사진 url 받음
@@ -35,12 +36,13 @@ public class ResultActivity extends AppCompatActivity {
         Glide.with(this).load(photoUrl).into(iv_profile); // 프로필 url을 이미지 뷰에 세팅
 
         btn_next = (ImageButton)findViewById(R.id.btn_next);
+        Intent intentt = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intentt);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(ResultActivity.this, HomeActivity.class);
-                Toast.makeText(ResultActivity.this, "위치정보 동의가 필요합니다", Toast.LENGTH_LONG).show();
                 startActivity(intent);
                 finish();
             }

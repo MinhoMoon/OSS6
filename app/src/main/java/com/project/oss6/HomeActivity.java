@@ -69,8 +69,7 @@ public class HomeActivity extends YouTubeBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(intent);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -78,7 +77,6 @@ public class HomeActivity extends YouTubeBaseActivity {
         //파이어베이스
         database = FirebaseDatabase.getInstance();
         database.getInstance ().setPersistenceEnabled(true);
-
         playbutton = findViewById(R.id.youtubebutton);
         youtubeView = findViewById(R.id.youtubeView);
         nextbutton = findViewById(R.id.nextbutton);
@@ -101,10 +99,8 @@ public class HomeActivity extends YouTubeBaseActivity {
                 1,
                 gps_LocationListener);
 
-
         class gpsThread implements  Runnable{
             public void run(){
-
                 if ( Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
                     ActivityCompat.requestPermissions( HomeActivity.this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0 );
                 } //안드로이드 버전 정보를 받아오지 못하면 GPS정보를 못보게 함
@@ -231,7 +227,7 @@ public class HomeActivity extends YouTubeBaseActivity {
             while(true){
             try {
                 weather();
-                Thread.sleep(6000); //60초마다 재실행
+                Thread.sleep(5000); //5초마다 재실행
             } catch (IOException | InterruptedException | JSONException e) {
                 e.printStackTrace();
             }
@@ -262,9 +258,9 @@ public class HomeActivity extends YouTubeBaseActivity {
         String mainW=null;
         double temp=0;
             StringBuilder urlBuilder = new StringBuilder("http://api.openweathermap.org/data/2.5/weather"); /*URL*/
-            urlBuilder.append("?" + URLEncoder.encode("lat","UTF-8") + "="+gps_GetLatitude); /*위도*/
-            urlBuilder.append("&" + URLEncoder.encode("lon","UTF-8") + "="+gps_GetLongitude ); /*공공데이터포털에서 받은 인증키*/
-            urlBuilder.append("&" + URLEncoder.encode("appid","UTF-8") + "=94c29906846b82e6e359edce29c1a4c8"); /*키번호*/
+            urlBuilder.append("?" + URLEncoder.encode("lat","UTF-8") + "="+gps_GetLatitude); /*위도 서울=37*/
+            urlBuilder.append("&" + URLEncoder.encode("lon","UTF-8") + "="+gps_GetLongitude ); /*경도 서울=127*/
+            urlBuilder.append("&" + URLEncoder.encode("appid","UTF-8") + "=94c29906846b82e6e359edce29c1a4c8"); /*공공데이터포털에서 받은 인증키*/
             urlBuilder.append("&units=metric"); /*섭씨*/
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
