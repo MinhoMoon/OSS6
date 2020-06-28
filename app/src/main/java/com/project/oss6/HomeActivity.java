@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -66,6 +67,11 @@ public class HomeActivity extends YouTubeBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -79,7 +85,7 @@ public class HomeActivity extends YouTubeBaseActivity {
         pausebutton = findViewById(R.id.pausebutton);
         btn_Weather = findViewById(R.id.btn_Weather);
         btn_Weather.setSelected(true);
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -94,6 +100,7 @@ public class HomeActivity extends YouTubeBaseActivity {
                 5000,
                 1,
                 gps_LocationListener);
+
 
         class gpsThread implements  Runnable{
             public void run(){
@@ -314,7 +321,6 @@ public class HomeActivity extends YouTubeBaseActivity {
             GuiThread g = new GuiThread();
             Thread WeatherGuiThread = new Thread(g);
             WeatherGuiThread.start();
-
         }
 
     class GuiThread implements Runnable {

@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             intent.putExtra("nickName", account.getDisplayName());
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl())); // string.valueOf() 특정 자료형을 string 형태로 변환
                             startActivity(intent);
+                            finish();
                         } else { //로그인 실패 했을 때
                             Toast.makeText(MainActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                         }

@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -36,8 +38,11 @@ public class ResultActivity extends AppCompatActivity {
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(ResultActivity.this, HomeActivity.class);
+                Toast.makeText(ResultActivity.this, "위치정보 동의가 필요합니다", Toast.LENGTH_LONG).show();
                 startActivity(intent);
+                finish();
             }
         });
     }
