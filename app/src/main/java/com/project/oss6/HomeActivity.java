@@ -109,16 +109,17 @@ public class HomeActivity extends YouTubeBaseActivity {
                     ActivityCompat.requestPermissions( HomeActivity.this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0 );
                 } //안드로이드 버전 정보를 받아오지 못하면 GPS정보를 못보게 함
                 else{
-                    Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);//NETWORK_PROVIDER : WI-Fi 네트워크나 통신사의 기지국 정보를 통해 위치를 알려줌
-                    String gps_Provider = location.getProvider(); // provider 안에 스트링값으로 위치정보를 받아서 저장해준다
-                    double gps_Latitude = location.getLatitude(); // latitude 안에 위도정보를 받아서 저장해준다.
-                    double gps_Longitude = location.getLongitude();// longitude 안에 스트링값으로 경도정보를 받아서 저장해준다.
-                    double gps_Altitude = location.getAltitude();// altitude 안에 고도정보를 받아서 저장해준다.
-                    gps_GetProvider = gps_Provider;
-                    gps_GetLatitude = gps_Latitude;
-                    gps_GetLongitude = gps_Longitude;
-                    gps_GetAltitude = gps_Altitude;
-
+                    try {
+                        Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);//NETWORK_PROVIDER : WI-Fi 네트워크나 통신사의 기지국 정보를 통해 위치를 알려줌
+                        String gps_Provider = location.getProvider(); // provider 안에 스트링값으로 위치정보를 받아서 저장해준다
+                        double gps_Latitude = location.getLatitude(); // latitude 안에 위도정보를 받아서 저장해준다.
+                        double gps_Longitude = location.getLongitude();// longitude 안에 스트링값으로 경도정보를 받아서 저장해준다.
+                        double gps_Altitude = location.getAltitude();// altitude 안에 고도정보를 받아서 저장해준다.
+                        gps_GetProvider = gps_Provider;
+                        gps_GetLatitude = gps_Latitude;
+                        gps_GetLongitude = gps_Longitude;
+                        gps_GetAltitude = gps_Altitude;
+                    }catch (NullPointerException e){e.printStackTrace();}
                 }
             }
         }
